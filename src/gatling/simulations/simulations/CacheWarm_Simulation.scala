@@ -34,12 +34,6 @@ class CacheWarm_Simulation extends Simulation {
       )
     }
 
-    .exec {
-      session =>
-        println(session)
-        session
-    }
-
   //defines the Gatling simulation model, based on the inputs
   def simulationProfile(numberOfUsers: Int, testDurationMins: Int): Seq[OpenInjectionStep] = {
     if (debugMode == "off") {
