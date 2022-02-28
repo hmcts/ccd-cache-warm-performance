@@ -13,7 +13,7 @@ object CcdCacheWarm {
 
   val clientSecret = ConfigFactory.load.getString("auth.clientSecret")
 
-  val userDetails = csv("UserCredentials.csv")
+  val userDetails = csv("UserCredentials.csv").circular
 
   val getServiceToken =
 

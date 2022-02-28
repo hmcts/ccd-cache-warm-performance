@@ -10,7 +10,7 @@ import scala.concurrent.duration._
 
 class CacheWarm_Simulation extends Simulation {
 
-  val cacheUsers = 50
+  val cacheUsers = 60
   val cacheDurationMins = 5
 
   val httpProtocol = http
@@ -32,6 +32,12 @@ class CacheWarm_Simulation extends Simulation {
         CcdCacheWarm.getIdamId,
         CcdCacheWarm.loadJurisdictionsToWarmCache
       )
+    }
+
+    .exec {
+      session =>
+        println(session)
+        session
     }
 
   //defines the Gatling simulation model, based on the inputs

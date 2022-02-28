@@ -10,7 +10,7 @@ properties([
 @Library("Infrastructure") _
 
 def product = "ccd"
-def component = "api"
+def component = "case-worker"
 
 def secrets = [
         'ccd-perftest': [
