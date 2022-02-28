@@ -1,7 +1,7 @@
-### No Fault Divorce Gatling Performance Tests
+### CCD Cache Warming Test to load data-store with the latest case type definitions
 
 To run locally:
-- Performance test against the perftest environment: `./gradlew gatlingRun`
+- Run against the perftest environment: `./gradlew gatlingRun`
 
 Flags:
 - Debug (single-user mode): `-Ddebug=on e.g. ./gradlew gatlingRun -Ddebug=on`
