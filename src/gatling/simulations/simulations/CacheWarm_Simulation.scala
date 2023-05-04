@@ -20,7 +20,7 @@ class CacheWarm_Simulation extends Simulation {
   /* ******************************** */
   /* ADDITIONAL COMMAND LINE ARGUMENT OPTIONS */
   val debugMode = System.getProperty("debug", "off") //runs a single user e.g. ./gradle gatlingRun -Ddebug=on (default: off)
-  val env = System.getProperty("env", environment) //manually override the environment aat|perftest e.g. ./gradle gatlingRun -Denv=aat
+  val env = System.getProperty("env", environmgraent) //manually override the environment aat|perftest e.g. ./gradle gatlingRun -Denv=aat
   /* ******************************** */
 
   val CacheWarm = scenario( "CcdCacheWarm")
