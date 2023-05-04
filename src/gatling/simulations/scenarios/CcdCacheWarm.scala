@@ -30,8 +30,8 @@ object CcdCacheWarm {
     .exec(http("CCDCacheWarm_000_GetBearerToken")
       .post(IdamAPIURL + "/o/token")
       .formParam("grant_type", "password")
-      .formParam("username", "${username}")
-      .formParam("password", "${password}")
+      .formParam("username", "#{username}")
+      .formParam("password", "#{password}")
       .formParam("client_id", "ccd_gateway")
       .formParam("client_secret", clientSecret)
       .formParam("scope", "openid profile roles openid roles profile")
@@ -44,7 +44,7 @@ object CcdCacheWarm {
 
     exec(http("CCDCacheWarm_000_GetIdamID")
       .get(IdamAPIURL + "/details")
-      .header("Authorization", "Bearer ${bearerToken}")
+      .header("Authorization", "Bearer #{bearerToken}")
       .check(jsonPath("$.id").saveAs("idamId")))
 
     .pause(1)
@@ -52,9 +52,9 @@ object CcdCacheWarm {
   val loadJurisdictionsToWarmCache =
 
     exec(http("CCDCacheWarm_000_LoadJurisdictions")
-      .get(CcdAPIURL + "/aggregated/caseworkers/${idamId}/jurisdictions?access=read")
-      .header("Authorization", "Bearer ${bearerToken}")
-      .header("ServiceAuthorization", "${authToken}")
+      .get(CcdAPIURL + "/aggregated/caseworkers/#{idamId}/jurisdictions?access=read")
+      .header("Authorization", "Bearer #{bearerToken}")
+      .header("ServiceAuthorization", "#{authToken}")
       .header("Content-Type", "application/json")
       .check(jsonPath("$[0].id")))
 
