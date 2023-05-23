@@ -1,7 +1,7 @@
 #!groovy
 
 properties([
-        pipelineTriggers([cron('0 8-19/1 * * *')]),
+        pipelineTriggers([cron('H 8-18/1 * * 1-5')]),
         parameters([
                 choice(name: 'ENVIRONMENT', choices: 'perftest', description: 'Environment to warm CCD cache')
         ])
