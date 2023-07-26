@@ -1,8 +1,8 @@
 plugins {
-  id 'org.owasp.dependencycheck' version '8.2.1'
+  id 'org.owasp.dependencycheck' version '8.3.1'
   id 'scala'
   id 'java-library'
-  id 'io.gatling.gradle' version '3.9.3.1'
+  id 'io.gatling.gradle' version '3.9.5'
 }
 
 java {
@@ -31,7 +31,7 @@ repositories {
 }
 
 gatling {
-  gatlingVersion '3.9.3'
+  gatlingVersion '3.9.5'
   scalaVersion '2.13.10'
   simulations = {
     include "simulations/CacheWarm_Simulation.scala"
