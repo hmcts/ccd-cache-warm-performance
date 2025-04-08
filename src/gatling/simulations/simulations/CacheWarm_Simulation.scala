@@ -11,7 +11,7 @@ import scala.concurrent.duration._
 class CacheWarm_Simulation extends Simulation {
 
   val cacheUsers = 60
-  val cacheDurationMins = 5
+  val cacheDurationMins = 1
 
   val httpProtocol = http
 
