@@ -45,7 +45,7 @@ gatling {
 sourceSets {
   gatling {
     scala {
-      srcDirs 'src/gatling/simulations'
+      srcDir 'src/gatling/simulations'
     }
     resources {
       srcDir 'src/gatling/resources'
