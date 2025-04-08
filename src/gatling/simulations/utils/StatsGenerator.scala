@@ -80,15 +80,20 @@ object StatsGenerator {
     // Sample structure for the global_stats.json file
     val json =
       s"""{
-         |  "name": "Global Information",
+         |  "name": "All Requests",
          |  "numberOfRequests": { "total": $numRequests, "ok": $numRequests, "ko": 0 },
-         |  "meanResponseTime": { "total": $meanTime, "ok": $meanTime, "ko": 0 },
-         |  "maxResponseTime": { "total": $meanTime, "ok": $meanTime, "ko": 0 },
          |  "minResponseTime": { "total": $meanTime, "ok": $meanTime, "ko": 0 },
-         |  "group1": { "name": "t < 800 ms", "count": $numRequests, "percentage": 100 },
-         |  "group2": { "name": "800 ms < t < 1200 ms", "count": 0, "percentage": 0 },
-         |  "group3": { "name": "t > 1200 ms", "count": 0, "percentage": 0 },
-         |  "group4": { "name": "failed", "count": 0, "percentage": 0 },
+         |  "maxResponseTime": { "total": $meanTime, "ok": $meanTime, "ko": 0 },
+         |  "meanResponseTime": { "total": $meanTime, "ok": $meanTime, "ko": 0 },
+         |  "standardDeviation": { "total": $meanTime, "ok": $meanTime, "ko": 0 },
+         |  "percentiles1": { "total": $meanTime, "ok": $meanTime, "ko": 0 },
+         |  "percentiles2": { "total": $meanTime, "ok": $meanTime, "ko": 0 },
+         |  "percentiles3": { "total": $meanTime, "ok": $meanTime, "ko": 0 },
+         |  "percentiles4": { "total": $meanTime, "ok": $meanTime, "ko": 0 },
+         |  "group1": { "name": "t < 800 ms", "htmlName": "t < 800 ms", "count": $numRequests, "percentage": 100 },
+         |  "group2": { "name": "800 ms <= t < 1200 ms", "htmlName": "t >= 800 ms <br> t < 1200 ms", "count": 0, "percentage": 0 },
+         |  "group3": { "name": "t >= 1200 ms", "htmlName": "t >= 1200 ms", "count": 0, "percentage": 0 },
+         |  "group4": { "name": "failed", "htmlName": "failed", "count": 0, "percentage": 0 },
          |  "meanNumberOfRequestsPerSecond": { "total": 1.0, "ok": 1.0, "ko": 0.0 }
          |}""".stripMargin
 
