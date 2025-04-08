@@ -30,6 +30,10 @@ repositories {
   mavenCentral()
 }
 
+dependencies {
+  gatling 'com.google.code.gson:gson:2.10.1'
+}
+
 gatling {
   gatlingVersion '3.9.5'
   scalaVersion '2.13.10'
@@ -41,10 +45,19 @@ gatling {
 sourceSets {
   gatling {
     scala {
-      srcDir 'src/gatling/simulations'
+      srcDirs 'src/gatling/simulations'
     }
     resources {
       srcDir 'src/gatling/resources'
     }
   }
 }
+
+task postProcessStats(type: JavaExec) {
+  dependsOn gatlingRun
+  dependsOn compileGatlingScala
+  mainClass.set('utils.PostProcessing')
+  classpath = sourceSets.gatling.runtimeClasspath
+}
+
+gatlingRun.finalizedBy postProcessStats
