@@ -39,6 +39,7 @@ gatling {
   scalaVersion '2.13.10'
   simulations = {
     include "simulations/CacheWarm_Simulation.scala"
+    include "simulations/Test_Simulation.scala"
   }
 }
 
@@ -52,7 +53,7 @@ sourceSets {
     }
   }
 }
-
+/*
 task postProcessStats(type: JavaExec) {
   dependsOn gatlingRun
   dependsOn compileGatlingScala
@@ -61,3 +62,4 @@ task postProcessStats(type: JavaExec) {
 }
 
 gatlingRun.finalizedBy postProcessStats
+*/

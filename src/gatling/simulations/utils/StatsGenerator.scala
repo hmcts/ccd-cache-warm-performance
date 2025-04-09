@@ -70,7 +70,7 @@ object StatsGenerator {
 
   // Method to create a fake global stats file for each request
   private def createFakeSimulation(name: String, meanTime: Int, numRequests: Int, basePath: String): Unit = {
-    val dirName = s"${basePath}${name}-${name}"
+    val dirName = s"${basePath}${name}-20250409103100000"
     val dir = new File(dirName)
     dir.mkdirs()
 
