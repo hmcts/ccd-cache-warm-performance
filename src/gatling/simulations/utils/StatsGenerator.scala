@@ -50,9 +50,7 @@ object StatsGenerator {
   }
 
   private def sanitizeName(name: String): String = {
-    val parts = name.split("_", 2)
-    val stripped = if (parts.length > 1) parts(1) else name
-    stripped.replaceAll("[^a-zA-Z0-9-_]", "_")
+    name.replaceAll("[^a-zA-Z0-9-_]", "_")
   }
 
   private def getStat(stats: JsonObject, statKey: String, subKey: String): Int = {
