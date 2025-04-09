@@ -5,7 +5,7 @@ import java.io.{File, FileReader, PrintWriter}
 import scala.jdk.CollectionConverters._
 
 /*
-THIS CODE READS THE STATS.JSON FROM THE TEST AND GENERATORS STATS PER GATLING TRANSACTION
+THIS CODE READS THE STATS.JSON FROM THE TEST AND GENERATES STATS PER GATLING TRANSACTION
 THIS WILL REPLACE THE AGGREGATED METRICS USED BY THE GATLING JENKINS PLUGIN WITH INDIVIDUAL METRICS PER TRANSACTION
  */
 object StatsGenerator {
@@ -32,10 +32,6 @@ object StatsGenerator {
     }
 
     val contents = jsonElement.getAsJsonObject.getAsJsonObject("contents")
-
-    //move the original simulation to a different folder location, so the global_stats isn't picked up by the Jenkins plugin
-    val statsRootDir = new File("build/reports/gatling")
-    moveOriginalSimulation(statsRootDir)
 
     for (entry <- contents.entrySet().asScala) {
       val reqElement = entry.getValue
@@ -99,24 +95,5 @@ object StatsGenerator {
     writer.close()
 
     println(s"[StatsGenerator] ✅ Created global_stats.json for [$name] in $dirName")
-  }
-
-  private def moveOriginalSimulation(simRoot: File): Unit = {
-    if (!simRoot.exists()) return
-
-    // Move to sibling 'originals' folder outside of Gatling's search path, so the Jenkins plugin doesn't pick them up
-    val originalsDir = new File(simRoot.getParentFile, "originals")
-    originalsDir.mkdirs()
-
-    simRoot.listFiles()
-      .filter(f => f.isDirectory && f.getName.matches(".*-simulation-\\d{17}"))
-      .foreach { dir =>
-        val targetDir = new File(originalsDir, dir.getName)
-        val success = dir.renameTo(targetDir)
-        if (success)
-          println(s"[StatsGenerator] 🔒 Moved original simulation report to: ${targetDir.getPath}")
-        else
-          println(s"[StatsGenerator] ⚠️ Failed to move original simulation folder: ${dir.getPath}")
-      }
   }
 }
