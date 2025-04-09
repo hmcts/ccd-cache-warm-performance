@@ -10,6 +10,10 @@ THIS WILL REPLACE THE AGGREGATED METRICS USED BY THE GATLING JENKINS PLUGIN WITH
  */
 object StatsGenerator {
 
+  // Define the list of custom transaction names you want to graph in Jenkins
+  // Note, the Jenkins plugin will also graph the aggregated simulation metrics by default
+  val transactionNamesToGraph = Set("CCDCacheWarm_000_Auth", "CCDCacheWarm_000_LoadJurisdictions")
+
   def run(statsFile: File): Unit = {
     if (!statsFile.exists()) {
       println(s"[StatsGenerator] stats.json not found: ${statsFile.getAbsolutePath}")
@@ -40,12 +44,15 @@ object StatsGenerator {
       val stats = request.getAsJsonObject("stats")
       val name = sanitizeName(stats.get("name").getAsString)
 
-      val meanResponseTime = getStat(stats, "meanResponseTime", "total")
-      val totalRequests = getStat(stats, "numberOfRequests", "total")
+      // Check if the transaction name is in the list of custom transaction names to graph
+      if (transactionNamesToGraph.contains(name)) {
+        val meanResponseTime = getStat(stats, "meanResponseTime", "total")
+        val totalRequests = getStat(stats, "numberOfRequests", "total")
 
-      println(s"[StatsGenerator] Request: $name, Mean Response Time: $meanResponseTime, Total Requests: $totalRequests")
+        println(s"[StatsGenerator] Request: $name, Mean Response Time: $meanResponseTime, Total Requests: $totalRequests")
 
-      createFakeSimulation(name, meanResponseTime, totalRequests, "build/reports/gatling/")
+        createFakeSimulation(name, meanResponseTime, totalRequests, "build/reports/gatling/")
+      }
     }
   }
 
@@ -63,7 +70,7 @@ object StatsGenerator {
   }
 
   private def createFakeSimulation(name: String, meanTime: Int, numRequests: Int, basePath: String): Unit = {
-    val dirName = s"${basePath}${name}-simulation-transactionStats/js"
+    val dirName = s"${basePath}${name}-simulation-txnStats/js"
     val dir = new File(dirName)
     dir.mkdirs()
 
