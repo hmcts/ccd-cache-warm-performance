@@ -49,7 +49,7 @@ object StatsGenerator {
 
       println(s"[StatsGenerator] Request: $name, Mean Response Time: $meanResponseTime, Total Requests: $totalRequests")
 
-      createFakeSimulation(name, meanResponseTime, totalRequests, "")
+      createFakeSimulation(name, meanResponseTime, totalRequests, "build/reports/gatling/")
     }
   }
 
