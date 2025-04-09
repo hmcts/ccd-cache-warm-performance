@@ -53,11 +53,11 @@ sourceSets {
   }
 }
 
-task postProcessStats(type: JavaExec) {
+task generateStats(type: JavaExec) {
   dependsOn gatlingRun
   dependsOn compileGatlingScala
-  mainClass.set('utils.PostProcessing')
+  mainClass.set('utils.GenerateStatsByTxn')
   classpath = sourceSets.gatling.runtimeClasspath
 }
 
-gatlingRun.finalizedBy postProcessStats
+gatlingRun.finalizedBy generateStats
