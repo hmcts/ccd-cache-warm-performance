@@ -2,7 +2,12 @@ package utils
 
 import java.io.File
 
-object PostProcessing {
+/*
+THIS CODE EXTRACTS THE STATS.JSON FROM THE TEST AND CALLS THE STATS GENERATOR TO CREATE STATS PER GATLING TRANSACTION
+THIS WILL REPLACE THE AGGREGATED METRICS USED BY THE GATLING JENKINS PLUGIN WITH INDIVIDUAL METRICS PER TRANSACTION
+ */
+
+object GenerateStatsByTxn {
   def main(args: Array[String]): Unit = {
     // Get the base directory for Gatling reports
     val baseDir = new File("build/reports/gatling/")

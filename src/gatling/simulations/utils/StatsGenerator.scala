@@ -2,11 +2,18 @@ package utils
 
 import com.google.gson.{JsonElement, JsonObject, JsonParser}
 import java.io.{File, FileReader, PrintWriter}
+import java.text.SimpleDateFormat
+import java.util.Date
 import scala.jdk.CollectionConverters._
 
+/*
+THIS CODE READS THE STATS.JSON FROM THE TEST AND GENERATORS STATS PER GATLING TRANSACTION
+THIS WILL REPLACE THE AGGREGATED METRICS USED BY THE GATLING JENKINS PLUGIN WITH INDIVIDUAL METRICS PER TRANSACTION
+ */
 object StatsGenerator {
 
-  // Main function to process stats.json file
+  private val timestamp: String = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date())
+
   def run(statsFile: File): Unit = {
     if (!statsFile.exists()) {
       println(s"[StatsGenerator] stats.json not found: ${statsFile.getAbsolutePath}")
@@ -23,19 +30,16 @@ object StatsGenerator {
         return
     }
 
-    if (!jsonElement.isJsonObject) {
-      println("[StatsGenerator] stats.json is not a JSON object")
+    if (!jsonElement.isJsonObject || !jsonElement.getAsJsonObject.has("contents")) {
+      println("[StatsGenerator] Invalid stats.json format")
       return
     }
 
-    val rootObject = jsonElement.getAsJsonObject
+    val contents = jsonElement.getAsJsonObject.getAsJsonObject("contents")
 
-    if (!rootObject.has("contents")) {
-      println("[StatsGenerator] stats.json missing 'contents' section")
-      return
-    }
-
-    val contents = rootObject.getAsJsonObject("contents")
+    //move the original simulation to a different folder location, so the global_stats isn't picked up by the Jenkins plugin
+    val statsRootDir = new File("build/reports/gatling")
+    moveOriginalSimulation(statsRootDir)
 
     for (entry <- contents.entrySet().asScala) {
       val reqElement = entry.getValue
@@ -53,31 +57,29 @@ object StatsGenerator {
     }
   }
 
-  // Helper method to sanitize request names (replace non-alphanumeric characters with underscores)
   private def sanitizeName(name: String): String = {
-    name.replaceAll("[^a-zA-Z0-9-_]", "_")
+    val parts = name.split("_", 2)
+    val stripped = if (parts.length > 1) parts(1) else name
+    stripped.replaceAll("[^a-zA-Z0-9-_]", "_")
   }
 
-  // Helper method to safely extract stats values from the JSON
   private def getStat(stats: JsonObject, statKey: String, subKey: String): Int = {
     if (stats.has(statKey) && stats.getAsJsonObject(statKey).has(subKey)) {
       stats.getAsJsonObject(statKey).get(subKey).getAsInt
     } else {
       println(s"[StatsGenerator] Missing '$statKey' or '$subKey' for request")
-      0 // Default to 0 if missing
+      0
     }
   }
 
-  // Method to create a fake global stats file for each request
   private def createFakeSimulation(name: String, meanTime: Int, numRequests: Int, basePath: String): Unit = {
-    val dirName = s"${basePath}${name}-simulation-20250409103100000/js"
+    val dirName = s"${basePath}${name}-simulation-transactionStats/js"
     val dir = new File(dirName)
     dir.mkdirs()
 
     val outputFile = new File(dir, "global_stats.json")
     val writer = new PrintWriter(outputFile)
 
-    // Sample structure for the global_stats.json file
     val json =
       s"""{
          |  "name": "All Requests",
@@ -100,6 +102,24 @@ object StatsGenerator {
     writer.write(json)
     writer.close()
 
-    println(s"[PerRequestStatsGenerator] ✅ Created global_stats.json for [$name] in $dirName")
+    println(s"[StatsGenerator] ✅ Created global_stats.json for [$name] in $dirName")
+  }
+
+  private def moveOriginalSimulation(simRoot: File): Unit = {
+    if (!simRoot.exists()) return
+
+    val originalsDir = new File(simRoot, "originals")
+    originalsDir.mkdirs()
+
+    simRoot.listFiles()
+      .filter(f => f.isDirectory && f.getName.matches(".*-simulation-\\d{17}"))
+      .foreach { dir =>
+        val targetDir = new File(originalsDir, dir.getName)
+        val success = dir.renameTo(targetDir)
+        if (success)
+          println(s"[StatsGenerator] 🔒 Moved original simulation report to: ${targetDir.getPath}")
+        else
+          println(s"[StatsGenerator] ⚠️ Failed to move original simulation folder: ${dir.getPath}")
+      }
   }
 }
