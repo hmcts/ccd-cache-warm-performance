@@ -2,8 +2,6 @@ package utils
 
 import com.google.gson.{JsonElement, JsonObject, JsonParser}
 import java.io.{File, FileReader, PrintWriter}
-import java.text.SimpleDateFormat
-import java.util.Date
 import scala.jdk.CollectionConverters._
 
 /*
@@ -11,8 +9,6 @@ THIS CODE READS THE STATS.JSON FROM THE TEST AND GENERATORS STATS PER GATLING TR
 THIS WILL REPLACE THE AGGREGATED METRICS USED BY THE GATLING JENKINS PLUGIN WITH INDIVIDUAL METRICS PER TRANSACTION
  */
 object StatsGenerator {
-
-  private val timestamp: String = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date())
 
   def run(statsFile: File): Unit = {
     if (!statsFile.exists()) {
@@ -108,7 +104,8 @@ object StatsGenerator {
   private def moveOriginalSimulation(simRoot: File): Unit = {
     if (!simRoot.exists()) return
 
-    val originalsDir = new File(simRoot, "originals")
+    // Move to sibling 'originals' folder outside of Gatling's search path, so the Jenkins plugin doesn't pick them up
+    val originalsDir = new File(simRoot.getParentFile, "originals")
     originalsDir.mkdirs()
 
     simRoot.listFiles()
