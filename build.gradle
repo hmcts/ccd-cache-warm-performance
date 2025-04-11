@@ -31,7 +31,6 @@ repositories {
 }
 
 dependencies {
-  gatling 'com.google.code.gson:gson:2.10.1'
   implementation project(":common-performance")
 }
 
@@ -54,11 +53,16 @@ sourceSets {
   }
 }
 
+ext {
+  transactionNamesToGraph = ["CCDCacheWarm_000_Auth", "CCDCacheWarm_000_LoadJurisdictions"]
+}
+
 task generateStats(type: JavaExec) {
   dependsOn gatlingRun
   dependsOn compileGatlingScala
   mainClass.set('stats.GenerateStatsByTxn')
-  classpath = sourceSets.gatling.runtimeClasspath + sourceSets.main.runtimeClasspath
+  args = transactionNamesToGraph
+  classpath = sourceSets.gatling.runtimeClasspath + project(":common-performance").sourceSets.main.runtimeClasspath
 }
 
 gatlingRun.finalizedBy generateStats

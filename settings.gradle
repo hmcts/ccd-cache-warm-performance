@@ -1,3 +1,5 @@
 rootProject.name = 'ccd-cache-warm-performance'
 
-includeBuild 'common/common-performance'
+include ':common-performance'
+
+project(':common-performance').projectDir = file('common/common-performance')
