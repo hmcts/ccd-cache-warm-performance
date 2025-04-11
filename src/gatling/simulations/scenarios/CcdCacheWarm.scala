@@ -49,7 +49,7 @@ object CcdCacheWarm {
 
     .pause(1)
 
-  val loadJurisdictionsToWarmCache =
+  val loadJurisdictionsToWarmCache = {
 
     exec(http("CCDCacheWarm_000_LoadJurisdictions")
       .get(CcdAPIURL + "/aggregated/caseworkers/#{idamId}/jurisdictions?access=read")
@@ -59,5 +59,6 @@ object CcdCacheWarm {
       .check(jsonPath("$[0].id")))
 
     .pause(1)
+  }
 
 }

@@ -1,0 +1,3 @@
+rootProject.name = 'ccd-cache-warm-performance'
+
+includeBuild 'common/common-performance'
