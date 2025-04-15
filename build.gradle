@@ -31,6 +31,7 @@ repositories {
 }
 
 dependencies {
+  implementation 'org.scala-lang:scala-library:2.13.10'
   implementation project(":common-performance")
 }
 
@@ -53,6 +54,12 @@ sourceSets {
   }
 }
 
+configurations {
+  gatlingImplementation.extendsFrom implementation
+  gatlingRuntimeOnly.extendsFrom runtimeOnly
+}
+
+/* Generate stats per transaction for use in Jenkins */
 ext {
   transactionNamesToGraph = ["CCDCacheWarm_000_Auth", "CCDCacheWarm_000_LoadJurisdictions"]
 }
