@@ -31,7 +31,7 @@ repositories {
 }
 
 dependencies {
-  gatling 'com.google.code.gson:gson:2.10.1'
+  gatling 'com.google.code.gson:gson:2.13.1'
 }
 
 gatling {
