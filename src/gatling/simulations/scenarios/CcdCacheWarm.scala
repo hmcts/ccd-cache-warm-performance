@@ -15,9 +15,17 @@ object CcdCacheWarm {
 
   val userDetails = csv("UserCredentials.csv").circular
 
-  val getServiceToken =
+  def getServiceToken(caseIdFeeder: Iterator[Map[String, Any]]) =
 
-    exec(http("CCDCacheWarm_000_Auth")
+    feed(caseIdFeeder)
+
+    .exec {
+      session =>
+        println(session)
+        session
+    }
+
+    .exec(http("CCDCacheWarm_000_Auth")
       .post(RpeAPIURL + "/testing-support/lease")
       .body(StringBody("""{"microservice":"ccd_data"}""")).asJson
       .check(regex("(.+)").saveAs("authToken")))

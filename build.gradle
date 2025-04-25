@@ -31,8 +31,8 @@ repositories {
 }
 
 dependencies {
-  implementation 'org.scala-lang:scala-library:2.13.10'
-  implementation project(":common-performance")
+  //gatling 'org.scala-lang:scala-library:2.13.10'
+  gatlingImplementation project(":common-performance")
 }
 
 gatling {
@@ -53,23 +53,3 @@ sourceSets {
     }
   }
 }
-
-configurations {
-  gatlingImplementation.extendsFrom implementation
-  gatlingRuntimeOnly.extendsFrom runtimeOnly
-}
-
-/* Generate stats per transaction for use in Jenkins */
-ext {
-  transactionNamesToGraph = ["CCDCacheWarm_000_Auth", "CCDCacheWarm_000_LoadJurisdictions"]
-}
-
-task generateStats(type: JavaExec) {
-  dependsOn gatlingRun
-  dependsOn compileGatlingScala
-  mainClass.set('stats.GenerateStatsByTxn')
-  args = transactionNamesToGraph
-  classpath = sourceSets.gatling.runtimeClasspath + project(":common-performance").sourceSets.main.runtimeClasspath
-}
-
-gatlingRun.finalizedBy generateStats
