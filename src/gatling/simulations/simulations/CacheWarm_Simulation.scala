@@ -29,7 +29,7 @@ class CacheWarm_Simulation extends Simulation {
 
   ElasticSearchFeederConfig.set(UserElasticSearchFeederConfig)
 
-  val caseIdFeeder = ElasticSearchCaseFeeder.feeder(FeederType.QUEUE, iterations)
+  val caseIdFeeder = ElasticSearchCaseFeeder.feeder(esIndices.ET_EnglandWales, "elasticSearchQuery.json", FeederType.QUEUE, iterations)
 
   val CacheWarm = scenario( "CcdCacheWarm")
     .exec(_.set("env", s"${env}"))
