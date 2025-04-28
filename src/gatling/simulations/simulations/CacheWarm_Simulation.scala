@@ -25,11 +25,15 @@ class CacheWarm_Simulation extends Simulation {
   val env = System.getProperty("env", environment) //manually override the environment aat|perftest e.g. ./gradle gatlingRun -Denv=aat
   /* ******************************** */
 
-  val iterations = if (debugMode == "off") CalculateRecordsRequired.calculate(1000, 1, 1, 1) else 1
-
   ElasticSearchFeederConfig.set(UserElasticSearchFeederConfig)
 
-  val caseIdFeeder = ElasticSearchCaseFeeder.feeder(esIndices.ET_EnglandWales, "elasticSearchQuery.json", FeederType.QUEUE, iterations)
+  val iterations = if (debugMode == "off") CalculateRecordsRequired.calculate(1000, 1, 1, 1) else 1
+
+  val caseIdFeeder = ElasticSearchCaseFeeder.feeder(
+    esIndices.ET_EnglandWales,
+    getClass.getClassLoader.getResource("elasticSearchQuery.json").getPath,
+    FeederType.QUEUE,
+    iterations)
 
   val CacheWarm = scenario( "CcdCacheWarm")
     .exec(_.set("env", s"${env}"))
