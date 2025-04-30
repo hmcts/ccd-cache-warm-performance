@@ -27,7 +27,7 @@ class CacheWarm_Simulation extends Simulation {
 
   ElasticSearchFeederConfig.set(UserElasticSearchFeederConfig)
 
-  val iterations = if (debugMode == "off") CalculateRecordsRequired.calculate(1000, 1, 1, 1) else 1
+  val iterations = if (debugMode == "off") CalculateRecordsRequired.calculate(cacheUsers, 0, 60, 0) else 1
 
   val caseIdFeeder = ElasticSearchCaseFeeder.feeder(
     esIndices.ET_EnglandWales,
