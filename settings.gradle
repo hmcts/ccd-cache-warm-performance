@@ -1,0 +1,5 @@
+rootProject.name = 'ccd-cache-warm-performance'
+
+include ':common-performance'
+
+project(':common-performance').projectDir = file('common/common-performance')
