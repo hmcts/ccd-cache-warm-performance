@@ -1,8 +1,8 @@
 package scenarios
 
-import com.typesafe.config.ConfigFactory
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
+import utilities.AzureKeyVault
 import utils.Environment
 
 object CcdCacheWarm {
@@ -11,7 +11,7 @@ object CcdCacheWarm {
   val IdamAPIURL = Environment.idamAPIURL
   val CcdAPIURL = Environment.ccdAPIURL
 
-  val clientSecret = ConfigFactory.load.getString("auth.clientSecret")
+  val clientSecret = AzureKeyVault.loadClientSecret("ccd-perftest", "ccd-api-gateway-oauth2-client-secret")
 
   val userDetails = csv("UserCredentials.csv").circular
 
