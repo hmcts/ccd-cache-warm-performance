@@ -31,6 +31,10 @@ withNightlyPipeline("java", product, component) {
 
     loadVaultSecrets(secrets)
 
+    afterAlways('checkout') {
+        sh """ git submodule update --init --recursive"""
+    }
+
     enablePerformanceTest()
 
     after('performanceTest') {
