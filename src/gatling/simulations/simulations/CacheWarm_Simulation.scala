@@ -5,8 +5,6 @@ import io.gatling.core.controller.inject.open.OpenInjectionStep
 import io.gatling.http.Predef._
 import io.gatling.core.scenario.Simulation
 import scenarios._
-import elasticSearchFeeder._
-import utils.UserElasticSearchFeederConfig
 
 import scala.concurrent.duration._
 
@@ -25,26 +23,9 @@ class CacheWarm_Simulation extends Simulation {
   val env = System.getProperty("env", environment) //manually override the environment aat|perftest e.g. ./gradle gatlingRun -Denv=aat
   /* ******************************** */
 
-  ElasticSearchFeederConfig.set(UserElasticSearchFeederConfig)
-
-  val iterations = if (debugMode == "off") CalculateRecordsRequired.calculate(cacheUsers, 0, 60, 0) else 1
-
-  val caseIdFeeder = ElasticSearchCaseFeeder.feeder(
-    esIndices.ET_EnglandWales,
-    getClass.getClassLoader.getResource("elasticSearchQuery.json").getPath,
-    FeederType.QUEUE,
-    iterations)
-
   val CacheWarm = scenario( "CcdCacheWarm")
     .exec(_.set("env", s"${env}"))
-    .exitBlockOnFail {
-      exec(
-        CcdCacheWarm.getServiceToken(caseIdFeeder),
-        CcdCacheWarm.getBearerToken,
-        CcdCacheWarm.getIdamId,
-        CcdCacheWarm.loadJurisdictionsToWarmCache
-      )
-    }
+    .exec(CcdCacheWarm.loadJurisdictionsToWarmCache)
 
   //defines the Gatling simulation model, based on the inputs
   def simulationProfile(numberOfUsers: Int, testDurationMins: Int): Seq[OpenInjectionStep] = {
