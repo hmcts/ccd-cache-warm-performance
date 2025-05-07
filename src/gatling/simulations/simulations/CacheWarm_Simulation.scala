@@ -25,7 +25,9 @@ class CacheWarm_Simulation extends Simulation {
 
   val CacheWarm = scenario( "CcdCacheWarm")
     .exec(_.set("env", s"${env}"))
-    .exec(CcdCacheWarm.loadJurisdictionsToWarmCache)
+    .exitBlockOnFail {
+      exec(CcdCacheWarm.loadJurisdictionsToWarmCache)
+    }
 
   //defines the Gatling simulation model, based on the inputs
   def simulationProfile(numberOfUsers: Int, testDurationMins: Int): Seq[OpenInjectionStep] = {
