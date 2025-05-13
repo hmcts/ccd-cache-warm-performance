@@ -9,9 +9,17 @@ object CcdCacheWarm {
 
   val userDetails = csv("UserCredentials.csv").circular
 
-  val loadJurisdictionsToWarmCache = {
+  def loadJurisdictionsToWarmCache(caseIdFeeder: Iterator[Map[String, Any]]) = {
 
-    feed(userDetails)
+    feed(caseIdFeeder)
+
+    .exec {
+      session =>
+        println(session)
+        session
+    }
+
+    .feed(userDetails)
 
     .exec(CcdHelper.authenticate("#{username}", "#{password}", CcdCaseTypes.CCD.microservice))
 
