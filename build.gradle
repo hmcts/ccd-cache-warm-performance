@@ -2,28 +2,20 @@ plugins {
   id 'org.owasp.dependencycheck' version '12.1.1'
   id 'scala'
   id 'java-library'
-  id 'io.gatling.gradle' version '3.9.5.6'
+  id 'io.gatling.gradle' version '3.14.3'
 }
 
 java {
   toolchain {
-    languageVersion = JavaLanguageVersion.of(17)
+    languageVersion = JavaLanguageVersion.of(21)
   }
 }
 
 dependencyCheck {
   suppressionFile = "common/common-performance/owasp/owasp-suppressions.xml"
-}
-
-tasks.withType(JavaExec) {
-  // Configure the size of the JVM if necessary
-  jvmArgs = ['-Xms1024m', '-Xmx2048m']
-  /* Use the following args to build a report when a test was terminated
-  args = [
-      "--reports-only", "fact-20201109092032896",
-      '--results-folder', file('build/reports/gatling').absolutePath,
-      ]
-  */
+  analyzers {
+    assemblyEnabled = false
+  }
 }
 
 tasks.withType(Copy).all{
@@ -38,12 +30,39 @@ dependencies {
   gatlingImplementation project(":common-performance")
 }
 
-gatling {
-  gatlingVersion '3.9.5'
-  scalaVersion '2.13.11'
-  simulations = {
-    include "simulations/CacheWarm_Simulation.scala"
+tasks.register("runSimulation", JavaExec) {
+  group = "Gatling Test"
+  description = "Runs a specified Gatling simulation without interactive mode"
+
+  classpath = sourceSets.gatling.runtimeClasspath
+  mainClass.set("io.gatling.app.Gatling")
+
+  // Add simulation class and results directory
+  args += [
+          "-s", "simulations.CacheWarm_Simulation",
+          "-rf", layout.buildDirectory.get().asFile.toString() + "/reports/gatling"
+  ]
+
+  // JVM args required for Java 21
+  jvmArgs += ["--add-opens=java.base/java.lang=ALL-UNNAMED"]
+
+  // Pass through all -D properties from command line
+  jvmArgs += System.properties.findAll { key, _ ->
+    key instanceof String && key.startsWith("-D") == false && key != "java.class.path"
+  }.collect { key, value ->
+    "-D${key}=${value}"
   }
+}
+
+// Override gatlingRun task
+tasks.named("gatlingRun") {
+  dependsOn("runSimulation")
+  enabled = false
+}
+
+gatling {
+  gatlingVersion '3.14.3'
+  scalaVersion '2.13.11'
 }
 
 sourceSets {
