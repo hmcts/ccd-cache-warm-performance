@@ -86,12 +86,15 @@ ext {
   transactionNamesToGraph = ["CCDCacheWarm_000_LoadJurisdictions"]
 }
 
-task generateStats(type: JavaExec) {
-  dependsOn gatlingRun
-  dependsOn compileGatlingScala
+tasks.register('generateStats', JavaExec) {
+  dependsOn tasks.named('gatlingRun')
+  dependsOn tasks.named('compileGatlingScala')
   mainClass.set('stats.GenerateStatsByTxn')
   args = transactionNamesToGraph
   classpath = sourceSets.gatling.runtimeClasspath + project(":common-performance").sourceSets.main.runtimeClasspath
 }
 
-gatlingRun.finalizedBy generateStats
+// Ensure it runs after Gatling
+tasks.named('gatlingRun') {
+  finalizedBy tasks.named('generateStats')
+}
