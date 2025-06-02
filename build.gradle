@@ -61,8 +61,8 @@ tasks.named("gatlingRun") {
 }
 
 gatling {
-  gatlingVersion '3.14.3'
-  scalaVersion '2.13.11'
+  gatlingVersion = '3.14.3'
+  scalaVersion = '2.13.11'
 }
 
 sourceSets {
