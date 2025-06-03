@@ -9,3 +9,4 @@ build/**
 *.log
 out/**
 *.lock
+.java-version

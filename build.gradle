@@ -13,9 +13,7 @@ java {
 
 dependencyCheck {
   suppressionFile = "common/common-performance/owasp/owasp-suppressions.xml"
-  analyzers {
-    assemblyEnabled = false
-  }
+  analyzers.assemblyEnabled = false
 }
 
 tasks.withType(Copy).all{
