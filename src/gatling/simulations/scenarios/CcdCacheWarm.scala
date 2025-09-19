@@ -3,6 +3,7 @@ package scenarios
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import ccd._
+import io.gatling.core.session.Expression
 import utils.Environment
 
 object CcdCacheWarm {
