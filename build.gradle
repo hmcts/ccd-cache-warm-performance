@@ -2,7 +2,7 @@ plugins {
   id 'org.owasp.dependencycheck' version '12.1.1'
   id 'scala'
   id 'java-library'
-  id 'io.gatling.gradle' version '3.14.3'
+  id 'io.gatling.gradle' version '3.14.4'
 }
 
 java {
@@ -59,7 +59,7 @@ tasks.named("gatlingRun") {
 }
 
 gatling {
-  gatlingVersion = '3.14.3'
+  gatlingVersion = '3.14.4'
   scalaVersion = '2.13.11'
 }
 
