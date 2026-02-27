@@ -2,7 +2,7 @@ plugins {
   id 'org.owasp.dependencycheck' version '12.2.0'
   id 'scala'
   id 'java-library'
-  id 'io.gatling.gradle' version '3.14.4'
+  id 'io.gatling.gradle' version '3.15.0'
 }
 
 java {
