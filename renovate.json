@@ -2,5 +2,17 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "local>hmcts/.github:renovate-config"
+  ],
+  "git-submodules": {
+    "enabled": true
+  },
+  "schedule": ["at any time"],
+  "packageRules": [
+    {
+      "matchManagers": ["git-submodules"],
+      "matchPackageNames": ["common/common-performance"],
+      "automerge": true,
+      "automergeType": "branch"
+    }
   ]
 }
