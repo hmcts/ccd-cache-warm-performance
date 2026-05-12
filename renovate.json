@@ -10,9 +10,8 @@
   "packageRules": [
     {
       "matchManagers": ["git-submodules"],
-      "matchPackageNames": ["common/common-performance"],
-      "automerge": true,
-      "automergeType": "branch"
+      "matchDepNames": ["common/common-performance"],
+      "automerge": true
     }
   ]
 }
