@@ -1,0 +1,38 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "local>hmcts/.github:renovate-config"
+  ],
+  "git-submodules": {
+    "enabled": true
+  },
+  "schedule": ["at any time"],
+  "packageRules": [
+    {
+      "description": "Auto-merge common-performance submodule updates immediately",
+      "matchManagers": ["git-submodules"],
+      "matchDepNames": ["common/common-performance"],
+      "automerge": true
+    },
+    {
+      "description": "Auto-merge Gradle dependency/plugin patch/minor updates after 14 days",
+      "matchManagers": ["gradle"],
+      "matchUpdateTypes": ["patch", "minor"],
+      "minimumReleaseAge": "14 days",
+      "automerge": true
+    },
+    {
+      "description": "Auto-merge Gradle wrapper patch/minor updates after 14 days",
+      "matchManagers": ["gradle-wrapper"],
+      "matchUpdateTypes": ["patch", "minor"],
+      "minimumReleaseAge": "14 days",
+      "automerge": true
+    },
+    {
+      "description": "Disable Gradle major upgrades such as Gradle 9 until they are officially supported by Gatling",
+      "matchManagers": ["gradle-wrapper"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    }
+  ]
+}
