@@ -15,6 +15,7 @@ dependencyCheck {
   suppressionFile = "common/common-performance/owasp/owasp-suppressions.xml"
   analyzers.assemblyEnabled = false
   analyzers.ossIndexEnabled = false
+  scanConfigurations = ['runtimeClasspath', 'gatlingRuntimeClasspath']
 }
 
 tasks.withType(Copy).all{
@@ -23,6 +24,25 @@ tasks.withType(Copy).all{
 
 repositories {
   mavenCentral()
+}
+
+ext {
+  netty41Version = '4.1.136.Final'
+  netty42Version = '4.2.16.Final'
+}
+
+allprojects {
+  configurations.configureEach {
+    resolutionStrategy.eachDependency { details ->
+      if (details.requested.group == 'io.netty' && details.requested.version != null) {
+        if (details.requested.version.startsWith('4.2.')) {
+          details.useVersion netty42Version
+        } else if (details.requested.version.startsWith('4.1.')) {
+          details.useVersion netty41Version
+        }
+      }
+    }
+  }
 }
 
 dependencies {
