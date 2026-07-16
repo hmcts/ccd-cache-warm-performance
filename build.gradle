@@ -2,6 +2,12 @@ plugins {
   id 'performance'
 }
 
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(21)
+  }
+}
+
 performance {
   simulationClass = 'simulations.CacheWarm_Simulation'
   transactionNamesToGraph = ['CCDCacheWarm_000_LoadJurisdictions']
