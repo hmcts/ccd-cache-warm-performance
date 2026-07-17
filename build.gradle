@@ -12,3 +12,7 @@ performance {
   simulationClass = 'simulations.CacheWarm_Simulation'
   transactionNamesToGraph = ['CCDCacheWarm_000_LoadJurisdictions']
 }
+
+gatling {
+  jvmArgs += ['-Xms2048m', '-Xmx4096m']
+}
