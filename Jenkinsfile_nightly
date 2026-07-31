@@ -7,7 +7,7 @@ properties([
         ])
 ])
 
-@Library("Infrastructure") _
+@Library("Infrastructure@DTSPO-30107-jenkins-agents-2") _
 
 def product = "ccd"
 def component = "case-worker"
